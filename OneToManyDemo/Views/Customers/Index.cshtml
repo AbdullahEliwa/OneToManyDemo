@@ -1,0 +1,53 @@
+﻿@model IEnumerable<CustomerDto>
+@{
+    ViewData["Title"] = "Customers";
+}
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.25/r-2.2.9/datatables.min.css" />
+
+}
+
+<section class="row">
+    <div class="col-12">
+        <a asp-action="Create" class="col-md-3 btn btn-success mb-4">Create New Cutomer</a>
+    </div>
+
+    <div class="col-12">
+        <table id="dataTable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@customer.Id</td>
+                        <td>@customer.Name</td>
+                        <td>
+                            <a asp-action="Update" asp-route-id="@customer.Id" class="btn btn-primary">Update</a>
+                            <a asp-action="Delete" asp-route-id="@customer.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+@section Scripts{
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.25/r-2.2.9/datatables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                
+            });
+        });
+    </script>
+}

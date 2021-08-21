@@ -1,0 +1,97 @@
+﻿@model CustomerDto
+
+@{
+    ViewData["Title"] = "Customer Form";
+    var addressIndex = 0;
+}
+
+<section class="row">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" type="text" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        @if (Model.Addresses.Any())
+        {
+            <div id="add-address" class="col-md-12">
+                <div class="col-md-12 mb-3">
+                    <a id="add-address-button" class="btn btn-success text-white">Add Address</a>
+                </div>
+
+                <div class="col-md-12">
+                    <div id="address-placeholder" class="form-group">
+                        @foreach (var address in Model.Addresses)
+                        {
+                            <div class="input-group mb-2">
+                                <input type="hidden" asp-for="Addresses[addressIndex].Id" />
+                                <input type="hidden" asp-for="Addresses[addressIndex].CustomerId" />
+                                <input type="text" asp-for="Addresses[addressIndex].Content" class="form-control" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-danger" type="button" onclick="removeAddress(this)">Remove</button>
+                                </div>
+                            </div>
+                            addressIndex++;
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="add-address" class="col-md-12">
+                <div class="col-md-12 mb-3">
+                    <a id="add-address-button" class="btn btn-success text-white">Add Address</a>
+                </div>
+
+                <div class="col-md-12">
+                    <div id="address-placeholder" class="form-group">
+
+                    </div>
+                </div>
+            </div>
+
+        }
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</section>
+
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            var addressNo = @addressIndex;
+
+            $("#add-address-button").on('click', function () {
+                $("#address-placeholder").append(`
+                    <div class="input-group mb-2">
+                        <input type="hidden" name="Addresses[`+ addressNo + `].Id" />
+                        <input type="text" name="Addresses[`+ addressNo +`].Content" class="form-control" />
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" type="button" onclick="removeAddress(this)">Remove</button>
+                        </div>
+                    </div>
+
+                `);
+                addressNo++;
+
+            });
+
+
+        });
+
+
+        function removeAddress(e) {
+            e.closest(".input-group").remove();
+        }
+    </script>
+}
